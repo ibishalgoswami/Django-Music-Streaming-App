@@ -1,0 +1,39 @@
+{% extends "index.html" %}
+
+{% block content %}
+<style type="text/css">
+ 
+</style>
+<div class="container">
+  <div class="row">
+    <div class="col-md-9 mt-1">
+      {% for i in listen_later %}
+      <ul class="list-group p-1">
+        <li class="list-group-item d-flex justify-content-between align-items-center" id="lis-item">
+          <div class="image-parent">
+            <img src="/media/{{i.image}}" class="img-fluid" alt="quixote">
+          </div>
+          {{i.title}}
+          <audio id="myAudio" controls>
+            <source src="{{i.song.url}}" id="audio-source" preload="auto" type="audio/mp3">
+          </audio>
+          <span>
+            <form method="post" action="listen_later/remove">
+              {% csrf_token %}
+              <button class="btn btn-danger" style="font-size:10px" type="submit"><i class="fa fa-close"></i></button>
+              <input type="hidden" value="{{i.id}}" id="hidden_val" name="remove_song_id">
+            </form>
+          </span>
+        </li>
+      </ul>
+      {% endfor%}
+    </div>
+    <div class="col-md-3 mt-2">
+
+    </div>
+  </div>
+</div>
+</div>
+{% endblock content %}
+
+

@@ -1,0 +1,153 @@
+
+body {
+  overflow-x: hidden;
+}
+
+.list-group-item {
+  background-color:#343a40;
+  color:#0081cb;
+}
+
+#stick-group {
+  position: fixed;
+  text-align: left;
+}
+
+img{
+  height:250px;
+  width:100%;
+}
+
+.item{
+  padding-left:5px;
+  padding-right:5px;
+}
+.item-card{
+  transition:0.5s;
+  cursor:pointer;
+}
+.item-card-title{  
+  font-size:13px;
+  transition:1s;
+  cursor:pointer;
+  text-align: center;
+  color: #0081cb;
+  font-weight: 400;
+}
+.item-card-title i{  
+  font-size:15px;
+  transition:1s;
+  cursor:pointer;
+  color:#ffa710
+}
+.card-title i:hover{
+  transform: scale(1.25) rotate(100deg); 
+  /* color:#18d4ca; */
+  
+}
+.card:hover{
+  transform: scale(1.05);
+  box-shadow: 10px 10px 15px rgba(0,0,0,0.3);
+}
+.card-text{
+  height:80px;  
+}
+
+.card::before, .card::after {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  transform: scale3d(0, 0, 1);
+  transition: transform .3s ease-out 0s;
+  background: rgba(255, 255, 255, 0.1);
+  content: '';
+  pointer-events: none;
+}
+.card::before {
+  transform-origin: left top;
+}
+.card::after {
+  transform-origin: right bottom;
+}
+.card:hover::before, .card:hover::after, .card:focus::before, .card:focus::after {
+  transform: scale3d(1, 1, 1);
+}
+
+audio::-webkit-media-controls-panel {
+  background-color:#b6b5b8
+}
+
+#desc
+{
+  margin:5px;
+  padding: 5px;
+}
+
+
+.form-inline .form-control {
+    color:green;
+}
+
+.mr-sm-2, .mx-sm-2 {
+  margin-right: .5rem!important;
+  background-color: transparent;
+}
+
+.pl-3, .px-3 {
+  padding-left: 1.2rem!important;
+}
+
+
+.item-card {
+  background-color: #343a40;
+}
+
+.mt-lg-0, .my-lg-0 {
+  margin-right: 30px;
+}
+
+.alert-warning {
+  color: white;
+  background-color: #0081cb;
+  border-color: #ffeeba;
+  height: 53px;
+}
+
+element.style {
+  display: block;
+  padding-right: 17px;
+  background-color: red;
+}
+
+.category
+{
+  width: 190px;
+}
+
+.image-parent {
+  max-width: 40px;
+}
+
+audio {
+  width: 250px;
+  height: 54px;
+}
+
+#lis-item {
+  height: 70px;
+}
+
+.ui-menu .ui-menu-item{
+
+  width: 200px;
+
+  /* for autocomplete */
+  /* background:red; */
+  /* height:100%; */
+  /* font-size:8px; */
+  /* margin-top: 79px; */
+  
+  /* position:absolute; */
+}

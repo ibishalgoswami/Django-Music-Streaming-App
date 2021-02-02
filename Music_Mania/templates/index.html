@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title></title>
+  
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+  <link href="https://fonts.googleapis.com/css2?family=Merienda&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'main.css' %}">
+  <link rel="stylesheet" href="  https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/5.4.0/bootbox.min.js">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  
+</head>
+
+<body style="background-color:#272c34;">
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+    <a class="navbar-brand" href="/" style="color:#0081cb;font-size:24px; font-weight: 900">Music Mania</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item" style="color:#0081cb">
+          <a class="nav-link" href="/" style="color:#0081cb">Home <span class="sr-only"></span></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/listen_later" style="color:#0081cb">Listen Later</a>
+        </li>
+      </ul>
+      <form class="form-inline my-2 my-lg-0" autocomplete="off">
+        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="query" id="tags">
+        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+      </form>
+    </div>
+    <div class="nav-item" id="signin">
+      {% if request.user.is_authenticated %}
+      <ul class="navbar-nav mr-5">
+        <!-- PROFILE DROPDOWN - scrolling off the page to the right -->
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown"
+            aria-haspopup="true" aria-expanded="false" style="color:#0081cb">
+            {{user}}
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <a class="dropdown-item" href="signup/logout"">Log Out</button> </a>  
+          </div>
+        </li>
+    </ul>
+      {% else %}
+      <button type=" button" class="btn btn-outline-success" data-toggle="modal" data-target="#SignInModal">
+              Log In
+              </button>
+              {% endif %}
+          </div>
+  </nav>
+
+  {% block content %}
+  <!--Django Templete inheritance -->
+
+  <!--Pop up message from 'sweet alert' when login or logout successful or error when registration failed starts here-->
+  {% include 'log-popup.html' %}
+  <!--Pop up message when login or logout successful or error when registration failed ends here-->
+
+  <!-- messages -->
+  <div class="row">
+    <!--Showing Category starts here-->
+    <div class="col-md-2 mt-2 pl-3">
+      <div class="list-group" id="stick-group" >
+        <a href="/" class="list-group-item list-group-item-action category">All Images</a>
+        {% for i in Category %}
+        <a href="/category/{{i.id}}" class="list-group-item list-group-item-action category">{{i.name}}</a>
+        {% endfor %}
+      </div>
+    </div>
+    <!--Showing Category ends here-->
+
+    <!--Showing Image,Song,Song title,description starts here-->
+
+    <div class="col-md-10">
+      <div class="container">
+        <div class="row mt-1">
+          {%for i in song%}
+          <div class="col-md-3 col-sm-6 item p-1"
+            onclick="sowModelwithImage('{{i.image}}','{{i.song}}','{{i.description}}','{{i.id}}','{{i.title}}','{{i.song}}')">
+            <div class="card item-card card-block">
+              <img src="/media/{{i.image}}" alt="Photo of sunset">
+              <h5 class="item-card-title mt-3 mb-3">{{i.title}}</h5>
+            </div>
+          </div>
+          {%endfor%}
+        </div>
+      </div>
+    </div>
+
+    <!--Showing Image,Song,Song title,description ends here-->
+
+  </div>
+
+  <!-- Modal after clicking song box starts here-->
+  {%for i in song%}
+  <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" style="width:650px;" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title song-title" id="exampleModalCenterTitle">{{i.title}}</h5>
+          <button type="button" class="close btn-close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <h6 style="text-align:center; font-weight:50; display:none;">Song added to Listen Later</h6>
+          <div class="row">
+            <div class="col-md-5">
+              <img src="#" id="image-show">
+                {% if request.user.is_authenticated %}
+              <form method="post" action="listen_later">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-secondary ml-4 mt-2" id="listen_later"> Add to Listen later</button>
+                <input type="hidden" value="#" id="hidden_val" name="song_id">
+              </form>
+              {% else %}
+                <a href="signup"><button type="submit" class="btn btn-secondary ml-4 mt-2">Add to Listen later</button></a>
+              {% endif %}
+
+            </div>
+            <div class="col-md-6" id="desc_and_audio">
+              <div id="music-control">
+                <audio controls id="play-music">
+                  <source src="#" type="audio/mp3">
+                  Your browser does not support the audio element.
+                </audio>
+                <div>
+                  <p id="desc">{{i.description}}</p>
+                </div>
+              </div>
+            </div>
+            <!--including like button-->
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary btn-close" data-dismiss="modal">Close</button>
+          {% if request.user.is_authenticated %}
+          <a href="/media/{{i.song}}" download="{{i.title}}" id="download-song"><button type="button"
+              class="btn btn-secondary">Download</button></a>
+          {%else%}
+          <a href="signup"><button type="button" class="btn btn-secondary">Download</button></a>
+          {%endif%}
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+
+  <!-- Modal after clicking song box ends here-->
+
+  <!-- login Page starts here -->
+  {% include 'login.html' %}
+  <!-- login Page ends here -->
+
+
+  {% endblock content %}
+  <!-- JS, Popper.js, and jQuery -->
+  
+  <!-- <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+    integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+    crossorigin="anonymous"></script> -->
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+    integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
+    crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+    integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
+    crossorigin="anonymous"></script>
+    
+  {%load static%}
+  <script src="{%static 'main.js'%}" type="text/javascript"></script>
+  
+</body>
+
+</html>

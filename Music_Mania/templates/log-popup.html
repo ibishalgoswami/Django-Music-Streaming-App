@@ -1,0 +1,19 @@
+<div>
+    {% if messages %}
+    <script>
+        {% for message in messages %}
+        {% if message.tags == 'success' %}
+        Swal.fire(
+            '',
+            '{{message}}',
+            'success')
+        {%else%}
+        Swal.fire(
+            '',
+            '{{message}}',
+            'error')
+        {% endif %}
+        {% endfor %}
+    </script>
+    {% endif %}
+</div>
